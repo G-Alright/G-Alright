@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timestamping and Digital Signing</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+  }
+  form {
+    margin-bottom: 20px;
+  }
+  input[type="text"] {
+    width: 300px;
+    padding: 10px;
+    font-size: 16px;
+  }
+  input[type="submit"] {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  #message {
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+
+<form id="timestampForm">
+  <label for="data">Enter Data:</label><br>
+  <input type="text" id="data" name="data" required><br>
+  <label for="format">Choose Timestamp Format:</label><br>
+  <select id="format" name="format">
+    <option value="date">Date and Time</option>
+    <option value="unix">Unix Timestamp</option>
+    <option value="iso">ISO 8601</option>
+  </select><br>
+  <label for="expiry">Set Expiry Date:</label><br>
+  <input type="date" id="expiry" name="expiry"><br>
+  <input type="submit" value="Timestamp and Sign Data">
+</form>
+
+<div id="message"></div>
+
+<script>
+document.getElementById("timestampForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+  
+  var data = document.getElementById("data").value;
+  var format = document.getElementById("format").value;
+  var expiry = document.getElementById("expiry").value;
+  
+  // Generate timestamp based on selected format
+  var timestamp;
+  switch (format) {
+    case "date":
+      timestamp = new Date().toLocaleString();
+      break;
+    case "unix":
+      timestamp = Math.floor(Date.now() / 1000);
+      break;
+    case "iso":
+      timestamp = new Date().toISOString();
+      break;
+    default:
+      timestamp = new Date().toLocaleString();
+  }
+  
+  var message = "Data: " + data + "<br>Timestamp: " + timestamp;
+  document.getElementById("message").innerHTML = message;
+});
+</script>
+
+</body>
+</html>

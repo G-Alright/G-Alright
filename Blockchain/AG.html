@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Blockchain Timestamping App</title>
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 20px;
+        }
+        form {
+          margin-bottom: 20px;
+        }
+        input[type="text"] {
+          width: 300px;
+          padding: 10px;
+          font-size: 16px;
+        }
+        input[type="submit"] {
+          padding: 10px 20px;
+          font-size: 16px;
+          cursor: pointer;
+        }
+        #message {
+          margin-top: 20px;
+        }
+      </style>
+</head>
+
+<body>
+    <h1>Timestamping App</h1>
+
+    <!-- Input field to collect additional data -->
+    <input type="text" id="data-input" placeholder="Enter data...">
+    
+    <!-- Button to add a new timestamp -->
+    <button id="add-timestamp-btn">Add Timestamp</button>
+    
+    <!-- Container to display timestamps -->
+    <div id="timestamps-container">
+        <h2>Timestamps</h2>
+        <ul id="timestamps-list"></ul>
+    </div>
+
+    <script src="script.js"></script>
+    
+</body>
+
+</html>

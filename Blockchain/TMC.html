@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timestamping and Digital Signing</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f3f3f3;
+    }
+    form {
+      margin-bottom: 20px;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    input[type="text"],
+    select,
+    input[type="date"] {
+      width: calc(100% - 20px);
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    input[type="submit"] {
+      width: 100%;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+    #message {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1 align="center">DATA TIMESTAMPING PROJECT</h1>
+<form id="timestampForm">
+  <label for="data">Enter Data:</label><br>
+  <input type="text" id="data" name="data" required><br>
+  <label for="format">Choose Timestamp Format:</label><br>
+  <select id="format" name="format">
+    <option value="date">Date and Time</option>
+    <option value="unix">Unix Timestamp</option>
+    <option value="iso">ISO 8601</option>
+    <option value="custom">Custom Format</option> <!-- New option for custom format -->
+  </select><br>
+  <div id="customFormatInput" style="display: none;">
+    <label for="customFormat">Custom Timestamp Format:</label><br>
+    <input type="text" id="customFormat" name="customFormat"><br>
+  </div>
+  <label for="expiry">Set Expiry Date (optional):</label><br>
+  <input type="date" id="expiry" name="expiry"><br>
+  <input type="submit" value="Timestamp and Sign Data">
+</form>
+
+<div id="message"></div>
+
+<div id="previousData"></div>
+
+<script>
+// Function to retrieve previously timestamped data from local storage
+function getPreviousData() {
+  var previousData = localStorage.getItem("timestampedData");
+  if (previousData) {
+    document.getElementById("previousData").innerHTML = "<h2>Previously Timestamped Data</h2>" + previousData;
+  }
+}
+
+// Call the function to retrieve and display previously timestamped data
+getPreviousData();
+
+document.getElementById("format").addEventListener("change", function() {
+  var customFormatInput = document.getElementById("customFormatInput");
+  if (this.value === "custom") {
+    customFormatInput.style.display = "block";
+  } else {
+    customFormatInput.style.display = "none";
+  }
+});
+
+document.getElementById("timestampForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+  
+  var data = document.getElementById("data").value;
+  var format = document.getElementById("format").value;
+  var expiry = document.getElementById("expiry").value;
+  
+  // Generate timestamp based on selected format
+  var timestamp;
+  switch (format) {
+    case "date":
+      timestamp = new Date().toLocaleString();
+      break;
+    case "unix":
+      timestamp = Math.floor(Date.now() / 1000);
+      break;
+    case "iso":
+      timestamp = new Date().toISOString();
+      break;
+    case "custom": // Handle custom format
+      var customFormat = document.getElementById("customFormat").value;
+      timestamp = new Date().toLocaleString(customFormat);
+      break;
+    default:
+      timestamp = new Date().toLocaleString();
+  }
+  
+  // Format expiry date if provided
+  var expiryMessage = expiry ? "<br>Expiry Date: " + new Date(expiry).toLocaleDateString() : "";
+  
+  var message = "Data: " + data + "<br>Timestamp: " + timestamp + expiryMessage;
+  document.getElementById("message").innerHTML = message;
+  
+  // Store the timestamped data in local storage
+  var previousData = localStorage.getItem("timestampedData");
+  if (previousData) {
+    previousData += "<br><br>" + message;
+  } else {
+    previousData = message;
+  }
+  localStorage.setItem("timestampedData", previousData);
+  
+  // Update the displayed previously timestamped data
+  getPreviousData();
+});
+</script>
+</body>
+</html>
